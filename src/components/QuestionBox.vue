@@ -17,22 +17,33 @@
                   {{ answer }}
                 </b-list-group-item>
             </b-list-group>
-            <b-button variant="primary" href="#">Submit</b-button>
+            <b-button variant="primary"
+              @click="submitAnswer"
+              :disabled="selectedIndex === null || answered"
+            >
+              Submit
+            </b-button>
             <b-button @click="next" variant="success" href="#">next</b-button>
         </b-jumbotron>
     </div>
 </template>
 
 <script>
+import _ from "lodash";
+
 export default {
     name: 'QuestionBox',
     props: {
       currentQuestion: Object,
-      next: Function
+      next: Function,
+      increment: Function
     },
     data() {
       return {
           selectedIndex: null,
+          correctIndex: null,
+          shuffledAnswers: [],
+          answered: false,
       }
     },
     computed: {
@@ -42,20 +53,39 @@ export default {
         return answers;
       }
     },
+    watch: {
+      currentQuestion() {
+        this.selectedIndex = null,
+        this.answered = false,
+        this.shuffleAnswers()
+      }
+    },
     methods: {
       selectAnswer(index) {
         this.selectedIndex = index
+      },
+      submitAnswer() {
+        let isCorrect = false;
+        if(this.selectedIndex === this.correctIndex) {
+          isCorrect = true
+        }
+        this.answered = true
+        this.increment(isCorrect)
+      },
+      shuffleAnswers() {
+        let answers = [...this.currentQuestion.incorrect_answers, this.currentQuestion.correct_answer]
+        this.shuffledAnswers = _.shuffle(answers)
       }
     },
     mounted() {
-      console.log(this.currentQuestion)
+      this.shuffleAnswers()
     }
 }
 </script>
 
 <style scoped>
     .list-group {
-      margin-bottom: 0.8rem;
+      margin: 0.8rem;
     }
     .list-group-item:hover {
       background-color: #eeeeee;
