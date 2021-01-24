@@ -1,12 +1,11 @@
 <template>
     <div class="question_box_container">
         <b-jumbotron>
-            
             <template #lead>
               {{ currentQuestion.question }}
             </template>
 
-            <hr class="my-4">
+            <hr class="my-3">
             <b-list-group>
                 <b-list-group-item
                   v-for="(answer, index) in answers"

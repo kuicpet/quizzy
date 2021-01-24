@@ -6,7 +6,7 @@
     />
     <b-container>
       <b-row>
-        <b-col sm="12" md="6" offset="3">
+        <b-col sm="12" align-v="center">
           <QuestionBox
             v-if="questions.length"
             :currentQuestion="questions[index]"
